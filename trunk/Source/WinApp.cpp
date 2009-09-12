@@ -1,0 +1,47 @@
+// WinApp.cpp
+
+#include <afxwin.h>
+
+///////////////////////////////////////////////////////////////////////////
+
+CWinApp* g_pApp = NULL;
+
+///////////////////////////////////////////////////////////////////////////
+
+CWinApp* AfxGetApp()
+{
+	return g_pApp;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+CWinApp::CWinApp()
+	: m_pMainWnd(NULL)
+{
+	g_pApp = this;
+}
+
+BOOL CWinApp::InitInstance()
+{
+	return TRUE;
+}
+
+int CWinApp::Run()
+{
+	if ( ! m_pMainWnd) return 1;
+
+	MSG msg;
+	while (::GetMessage(&msg, NULL, 0, 0))
+	{
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+	return msg.wParam;
+}
+
+void CWinApp::ExitInstance()
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
+

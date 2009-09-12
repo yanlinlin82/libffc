@@ -1,0 +1,17 @@
+// afxext.h
+//
+// This is part of FFC (Free Foundation Classes).
+//
+// Anthor: Linlin Yan (yanlinlin82[at]gmail.com).
+//
+// Any sugguestion is welcome.
+
+#ifndef __AFX_EXT_H__
+#define __AFX_EXT_H__
+///////////////////////////////////////////////////////////////////////////
+
+#include "afx.h"
+
+///////////////////////////////////////////////////////////////////////////
+#endif//__AFX_EXT_H__
+
