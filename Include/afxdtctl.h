@@ -1,0 +1,17 @@
+// afxdtctl.h
+//
+// This is part of FFC (Free Foundation Classes).
+//
+// Anthor: Linlin Yan (yanlinlin82[at]gmail.com).
+//
+// Any sugguestion is welcome.
+
+#ifndef __AFX_DTCTL_H__
+#define __AFX_DTCTL_H__
+///////////////////////////////////////////////////////////////////////////
+
+#include "afxwin.h"
+
+///////////////////////////////////////////////////////////////////////////
+#endif//__AFX_DTCTL_H__
+

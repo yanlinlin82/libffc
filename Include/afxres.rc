@@ -1,0 +1,17 @@
+// afxres.rc
+//
+// This is part of FFC (Free Foundation Classes).
+//
+// Anthor: Linlin Yan (yanlinlin82[at]gmail.com).
+//
+// Any sugguestion is welcome.
+
+#ifndef __AFX_RES_RC__
+#define __AFX_RES_RC__
+///////////////////////////////////////////////////////////////////////////
+
+#include "afxres.h"
+
+///////////////////////////////////////////////////////////////////////////
+#endif//__AFX_RES_RC__
+
