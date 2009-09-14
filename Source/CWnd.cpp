@@ -1,6 +1,6 @@
 // Wnd.cpp
 
-#include <afxwin.h>
+#include "../Include/afxwin.h"
 #include <map>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -63,12 +63,29 @@ BOOL CWnd::Create(
 	UINT nID,
 	CCreateContext* pContext)
 {
+	return CreateEx(0, lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+}
+
+BOOL CWnd::CreateEx(
+	DWORD dwExStyle,
+	LPCTSTR lpszClassName,
+	LPCTSTR lpszWindowName,
+	DWORD dwStyle,
+	int x,
+	int y,
+	int nWidth,
+	int nHeight,
+	HWND hWndParent,
+	HMENU nIDorHMenu,
+	LPVOID lpParam)
+{
 	if (lpszClassName == NULL)
 	{
 		lpszClassName = _T("TestWindow");
 	}
 	
-	WNDCLASS wndClass = { 0 };
+	WNDCLASS wndClass;
+	ZeroMemory(&wndClass, sizeof(wndClass));
 	if ( ! ::GetClassInfo(
 		AfxGetInstanceHandle(),
 		lpszClassName,
@@ -86,23 +103,27 @@ BOOL CWnd::Create(
 			return FALSE;
 		}
 	}
-	
+
+	CREATESTRUCT cs;
+	ZeroMemory(&cs, sizeof(cs));
+	if ( ! PreCreateWindow(cs))
+	{
+		return FALSE;
+	}
+
 	g_hHook = ::SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, NULL, ::GetCurrentThreadId());
 	g_pWnd = this;
 
 	HWND hWnd = ::CreateWindowEx(
-		0,
+		dwExStyle,
 		lpszClassName,
 		lpszWindowName,
 		dwStyle,
-		rect.left,
-		rect.top,
-		(rect.right == static_cast<int>(CW_USEDEFAULT) ? CW_USEDEFAULT : rect.right - rect.left),
-		(rect.bottom == static_cast<int>(CW_USEDEFAULT) ? CW_USEDEFAULT : rect.bottom - rect.top),
-		(pParentWnd ? pParentWnd->m_hWnd : NULL),
-		reinterpret_cast<HMENU>(nID),
+		x, y, nWidth, nHeight,
+		hWndParent,
+		nIDorHMenu,
 		AfxGetInstanceHandle(),
-		pContext);
+		lpParam);
 
 	ASSERT(hWnd == m_hWnd);
 	::UnhookWindowsHookEx(g_hHook);
@@ -112,9 +133,55 @@ BOOL CWnd::Create(
 	return (m_hWnd != NULL);
 }
 
+BOOL CWnd::CreateEx(
+	DWORD dwExStyle,
+	LPCTSTR lpszClassName,
+	LPCTSTR lpszWindowName,
+	DWORD dwStyle,
+	const RECT& rect,
+	CWnd* pParentWnd,
+	UINT nID,
+	LPVOID lpParam)
+{
+	return CreateEx(
+		dwExStyle,
+		lpszClassName,
+		lpszWindowName,
+		dwStyle,
+		rect.left,
+		rect.top,
+		(rect.right == static_cast<int>(CW_USEDEFAULT) ? CW_USEDEFAULT : rect.right - rect.left),
+		(rect.bottom == static_cast<int>(CW_USEDEFAULT) ? CW_USEDEFAULT : rect.bottom - rect.top),
+		(pParentWnd ? pParentWnd->GetSafeHwnd() : NULL),
+		reinterpret_cast<HMENU>(nID),
+		lpParam);
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+BOOL CWnd::IsIconic() const
+{
+	return ::IsIconic(m_hWnd);
+}
+
 BOOL CWnd::ShowWindow(int nCmdShow)
 {
 	return ::ShowWindow(m_hWnd, nCmdShow);
+}
+
+void CWnd::UpdateWindow()
+{
+	::UpdateWindow(m_hWnd);
+}
+
+LRESULT CWnd::SendMessage(UINT msg, WPARAM w, LPARAM l)
+{
+	return ::SendMessage(m_hWnd, msg, w, l);
+}
+
+LRESULT CWnd::PostMessage(UINT msg, WPARAM w, LPARAM l)
+{
+	return ::PostMessage(m_hWnd, msg, w, l);
 }
 
 void CWnd::GetClientRect(LPRECT lpRect) const
@@ -127,11 +194,34 @@ INT_PTR CWnd::MessageBox(LPCTSTR text, LPCTSTR title, int type)
 	return ::MessageBox(m_hWnd, text, title, type);
 }
 
+CMenu* CWnd::GetSystemMenu(BOOL /*bRevert*/) const
+{
+	return NULL;
+}
+
+HICON CWnd::SetIcon(HICON hIcon, BOOL bBigIcon)
+{
+	LRESULT r = ::SendMessage(m_hWnd, WM_SETICON,
+		(bBigIcon ? ICON_BIG : ICON_SMALL),
+		reinterpret_cast<LPARAM>(hIcon));
+	return reinterpret_cast<HICON>(r);
+}
+
 ///////////////////////////////////////////////////////////////////////////
+
+BOOL CWnd::PreCreateWindow(CREATESTRUCT& /*cs*/)
+{
+	return TRUE;
+}
 
 LRESULT CWnd::WindowProc(UINT msg, WPARAM w, LPARAM l)
 {
-	return DefWindowProc(msg, w, l);
+	LRESULT r = 0;
+	if ( ! _ProcessMessage(m_hWnd, msg, w, l, r))
+	{
+		return DefWindowProc(msg, w, l);
+	}
+	return r;
 }
 
 LRESULT CWnd::DefWindowProc(UINT msg, WPARAM w, LPARAM l)
@@ -141,6 +231,35 @@ LRESULT CWnd::DefWindowProc(UINT msg, WPARAM w, LPARAM l)
 
 void CWnd::PostNcDestroy()
 {
+}
+
+void CWnd::DoDataExchange(CDataExchange* /*pDX*/)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+BEGIN_MESSAGE_MAP(CWnd, CCmdTarget)
+	ON_WM_CREATE()
+	ON_WM_PAINT()
+	ON_WM_SYSCOMMAND()
+END_MESSAGE_MAP()
+
+///////////////////////////////////////////////////////////////////////////
+
+int CWnd::OnCreate(LPCREATESTRUCT)
+{
+	return 0;
+}
+
+void CWnd::OnPaint()
+{
+	CPaintDC dc(this);
+}
+
+void CWnd::OnSysCommand(UINT id, LPARAM l)
+{
+	::DefWindowProc(m_hWnd, WM_SYSCOMMAND, id, l);
 }
 
 void CWnd::OnNcDestroy()

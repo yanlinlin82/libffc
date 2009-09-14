@@ -12,6 +12,7 @@
 
 #include <windows.h>
 #include <tchar.h>
+#include <cstring>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -26,8 +27,20 @@ public:
 		{
 			const T* p = x;
 			while (*p) p++;
-			m_pData = new T[p - x + 1];
-			lstrcpy(m_pData, x);
+			int length = p - x;
+			m_pData = new T[length + 1];
+			memcpy(m_pData, x, (length + 1) * sizeof(T));
+		}
+	}
+
+	CStringT(const CStringT& s)
+		: m_pData(EmptyString())
+	{
+		if ( ! s.IsEmpty())
+		{
+			int length = s.GetLength();
+			m_pData = new T[length + 1];
+			memcpy(m_pData, s.m_pData, (length + 1) * sizeof(T));
 		}
 	}
 
@@ -41,7 +54,28 @@ public:
 	}
 
 public:
+	CStringT& operator = (const CStringT& s)
+	{
+		if (this != &s)
+		{
+			if (m_pData != EmptyString())
+			{
+				delete[] m_pData;
+				m_pData = EmptyString();
+			}
+			if ( ! s.IsEmpty())
+			{
+				int length = s.GetLength();
+				m_pData = new T[length + 1];
+				memcpy(m_pData, s.m_pData, (length + 1) * sizeof(T));
+			}
+		}
+		return *this;
+	}
+
+public:
 	operator const T*() const { return m_pData; }
+	BOOL IsEmpty() const { return m_pData == EmptyString(); }
 
 public:
 	BOOL LoadString(UINT id)

@@ -1,27 +1,12 @@
 // WinMain.cpp
 
-#include <afxwin.h>
+#include "../Include/afxwin.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-HINSTANCE g_hInst = NULL;
-
-///////////////////////////////////////////////////////////////////////////
-
-HINSTANCE AFXAPI AfxGetInstanceHandle()
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
-	return g_hInst;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-int WINAPI WinMain(
-	HINSTANCE hInst,
-	HINSTANCE hPrevInst,
-	LPSTR lpCmdLine,
-	int nCmdShow)
-{
-	g_hInst = hInst;
+	AfxWinInit(hInst, hPrevInst, lpCmdLine, nCmdShow);
 
 	CWinApp* pApp = AfxGetApp();
 	if ( ! pApp->InitInstance())
