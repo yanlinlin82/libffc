@@ -1,6 +1,6 @@
 // DC.cpp
 
-#include <afxwin.h>
+#include "../Include/afxwin.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -24,6 +24,16 @@ int CDC::DrawText(
 	UINT nFormat)
 {
 	return DrawText(str, -1, lpRect, nFormat);
+}
+
+BOOL CDC::DrawIcon(int x, int y, HICON hIcon)
+{
+	return ::DrawIcon(m_hDC, x, y, hIcon);
+}
+
+BOOL CDC::DrawIcon(POINT point, HICON hIcon)
+{
+	return ::DrawIcon(m_hDC, point.x, point.y, hIcon);
 }
 
 ///////////////////////////////////////////////////////////////////////////

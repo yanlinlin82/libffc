@@ -1,6 +1,6 @@
 // FrameWnd.cpp
 
-#include <afxwin.h>
+#include "../Include/afxwin.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -11,7 +11,7 @@ BOOL CFrameWnd::Create(
 	const RECT& rect,
 	CWnd* pParentWnd,
 	LPCTSTR lpszMenuName,
-	DWORD dwExStyle,
+	DWORD /*dwExStyle*/,
 	CCreateContext* pContext)
 {
 	return CWnd::Create(
@@ -22,6 +22,23 @@ BOOL CFrameWnd::Create(
 		pParentWnd,
 		reinterpret_cast<UINT>(lpszMenuName),
 		pContext);
+}
+
+BOOL CFrameWnd::LoadFrame(
+	UINT /*nIDResource*/,
+	DWORD /*dwDefaultStyle*/,
+	CWnd* /*pParentWnd*/,
+	CCreateContext* /*pContext*/)
+{
+	return FALSE;
+}
+
+void CFrameWnd::EnableDocking(DWORD /*dwDockStyle*/)
+{
+}
+
+void CFrameWnd::DockControlBar(CControlBar* /*pBar*/, UINT /*nDockBarID*/, LPCRECT /*lpRect*/)
+{
 }
 
 ///////////////////////////////////////////////////////////////////////////

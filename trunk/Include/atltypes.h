@@ -6,8 +6,8 @@
 //
 // Any sugguestion is welcome.
 
-#ifndef __ATL_TYPES_H__
-#define __ATL_TYPES_H__
+#ifndef __ATLTYPES_H__
+#define __ATLTYPES_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
@@ -47,5 +47,5 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__ATL_TYPES_H__
+#endif//__ATLTYPES_H__
 

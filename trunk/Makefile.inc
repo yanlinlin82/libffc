@@ -4,7 +4,8 @@ CC	= i586-mingw32msvc-g++
 RC	= i586-mingw32msvc-windres
 AR	= i586-mingw32msvc-ar
 
-CFLAGS	= -Wall
+CFLAGS	= -W -Wall -D_DEBUG
+LFLAGS	= -W -Wall
 
 INC_DIR	= $(ROOT)Include/
 TMP_DIR	= $(ROOT)Temporary/

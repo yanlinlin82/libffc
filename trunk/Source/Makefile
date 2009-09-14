@@ -4,8 +4,12 @@ include $(ROOT)Makefile.inc
 
 PROJECT	= libffc
 TARGET	= $(LIB_DIR)$(PROJECT).a
+
+HEADERS	= \
+	$(wildcard $(INC_DIR)*.h) \
+	$(wildcard $(INC_DIR)FFC/*.h)
+
 MODULES	= $(wildcard *.cpp)
-HEADERS	= $(wildcard $(INC_DIR)*.h)
 
 OBJECTS	= $(MODULES:%.cpp=$(TMP_DIR)$(PROJECT)/%.o)
 
@@ -23,5 +27,5 @@ $(TARGET): $(OBJECTS)
 
 $(TMP_DIR)$(PROJECT)/%.o: %.cpp $(HEADERS)
 	@[ -d $(@D) ] || mkdir -pv $(@D)
-	$(CC) -c $(CFLAGS) $(INC_DIR:%=-I%) $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 

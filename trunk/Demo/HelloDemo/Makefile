@@ -2,12 +2,14 @@ ROOT	= ../../
 
 include $(ROOT)Makefile.inc
 
+LFLAGS		+= -mwindows -u _WinMain@16
+
 PROJECT		= HelloDemo
 TARGET		= $(OUT_DIR)$(PROJECT).exe
 MODULES		= $(wildcard *.cpp)
 HEADERS		= $(wildcard *.h)
 RESOURCE	= $(wildcard *.rc)
-LIBS		= ffc
+LIBS		= ffc ole32
 
 OBJECTS	= \
 	$(MODULES:%.cpp=$(TMP_DIR)$(PROJECT)/%.o) \
@@ -23,7 +25,7 @@ clean:
 
 $(TARGET): $(OBJECTS)
 	@[ -d $(@D) ] || mkdir -pv $(@D)
-	$(CC) $^ $(LIB_DIR:%=-L%) $(LIBS:%=-l%) -o $@
+	$(CC) $(LFLAGS) $^ $(LIB_DIR:%=-L%) $(LIBS:%=-l%) -o $@
 
 $(TMP_DIR)$(PROJECT)/%.o: %.cpp $(HEADERS)
 	@[ -d $(@D) ] || mkdir -pv $(@D)

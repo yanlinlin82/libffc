@@ -6,7 +6,7 @@ include Makefile.inc
 .PHONY: all
 .PHONY: clean
 
-DEMO	= HelloDemo ConsoleDemo
+DEMO	= HelloDemo ConsoleDemo DialogDemo SdiDemo MdiDemo
 
 all:
 	@$(MAKE) --directory=Source
