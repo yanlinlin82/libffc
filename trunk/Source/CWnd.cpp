@@ -17,15 +17,37 @@ RECT CWnd::rectDefault =
 
 std::map<HWND, CWnd*> g_WndMap;
 
-LRESULT CALLBACK WindowProcStart(HWND hWnd, UINT msg, WPARAM w, LPARAM l)
+void CWnd::Attach(HWND hWnd)
+{
+	ASSERT(m_hWnd == NULL);
+	g_WndMap.insert(std::pair<HWND, CWnd*>(hWnd, this));
+	m_hWnd = hWnd;
+}
+
+HWND CWnd::Detach()
+{
+	ASSERT(m_hWnd);
+	HWND hWnd = m_hWnd;
+	m_hWnd = NULL;
+	return hWnd;
+}
+
+CWnd* CWnd::FromHandle(HWND hWnd)
 {
 	std::map<HWND, CWnd*>::iterator it = g_WndMap.find(hWnd);
 	if (it == g_WndMap.end())
 	{
 		TRACE("HWND(0x%p) not found in WndMap\n", hWnd);
-		return ::DefWindowProc(hWnd, msg, w, l);
+		return NULL;
 	}
 	CWnd* pWnd = it->second;
+	ASSERT(pWnd);
+	return pWnd;
+}
+
+LRESULT CALLBACK WindowProcStart(HWND hWnd, UINT msg, WPARAM w, LPARAM l)
+{
+	CWnd* pWnd = CWnd::FromHandle(hWnd);
 	ASSERT(pWnd);
 	return pWnd->WindowProc(msg, w, l);
 }
@@ -40,8 +62,7 @@ LRESULT CALLBACK CallWndProc(int nCode, WPARAM wParam, LPARAM lParam)
 		if (g_pWnd)
 		{
 			PCWPSTRUCT p = reinterpret_cast<PCWPSTRUCT>(lParam);
-			g_WndMap.insert(std::pair<HWND, CWnd*>(p->hwnd, g_pWnd));
-			g_pWnd->m_hWnd = p->hwnd;
+			g_pWnd->Attach(p->hwnd);
 			g_pWnd = NULL;
 		}
 	}

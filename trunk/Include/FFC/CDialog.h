@@ -17,9 +17,20 @@ public:
 public:
 	virtual BOOL OnInitDialog();
 	virtual INT_PTR DoModal();
+	virtual void OnOK();
+	virtual void OnCancel();
 
 public:
-	virtual LRESULT WindowProc(UINT msg, WPARAM w, LPARAM l);
+	void EndDialog(int nResult);
+
+private:
+	static LRESULT CALLBACK DialogProcStart(HWND hDlg, UINT msg, WPARAM w, LPARAM l);
+	static INT_PTR CALLBACK _DialogProc(HWND hDlg, UINT msg, WPARAM w, LPARAM l);
+
+private:
+	LPCTSTR m_lpszTemplateName;
+	CWnd*   m_pParentWnd;
+	WNDPROC m_pWndProc;
 };
 
 ///////////////////////////////////////////////////////////////////////////
