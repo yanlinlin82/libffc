@@ -63,6 +63,10 @@ public:
 		LPVOID lpParam = NULL);
 
 public:
+	void Attach(HWND hWnd);
+	HWND Detach();
+
+public:
 	BOOL IsIconic() const;
 
 	BOOL ShowWindow(int nCmdShow);
@@ -95,6 +99,9 @@ protected:
 
 public:
 	HWND GetSafeHwnd() const { return m_hWnd; }
+	operator HWND() const { return GetSafeHwnd(); }
+
+	static CWnd* FromHandle(HWND hWnd);
 
 public:
 	HWND m_hWnd;

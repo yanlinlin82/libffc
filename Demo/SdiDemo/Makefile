@@ -23,7 +23,7 @@ all: $(TARGET)
 clean:
 	rm -rf $(TARGET) $(OBJECTS)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) $(LIB_DIR)libffc.a
 	@[ -d $(@D) ] || mkdir -pv $(@D)
 	$(CC) $(LFLAGS) $^ $(LIB_DIR:%=-L%) $(LIBS:%=-l%) -o $@
 
