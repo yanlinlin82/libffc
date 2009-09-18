@@ -85,9 +85,34 @@ public:
 		{
 			return FALSE;
 		}
-		m_pData = new T[lstrlen(buffer)];
+		m_pData = new T[lstrlen(buffer) + 1];
 		::lstrcpy(m_pData, buffer);
 		return TRUE;
+	}
+
+public:
+	void Format(LPCTSTR lpszFormat, ...)
+	{
+		va_list argList;
+		va_start(argList, lpszFormat);
+		FormatV(lpszFormat, argList);
+	}
+
+	void Format(UINT nFormatID, ...)
+	{
+		CStringT<T> format;
+		format.LoadString(nFormatID);
+		va_list argList;
+		va_start(argList, nFormatID);
+		FormatV(format, argList);
+	}
+
+	void FormatV(LPCTSTR lpszFormat, va_list argList)
+	{
+		T buffer[1024] = { 0 };
+		wvsprintf(buffer, lpszFormat, argList);
+		m_pData = new T[lstrlen(buffer) + 1];
+		::lstrcpy(m_pData, buffer);
 	}
 
 private:

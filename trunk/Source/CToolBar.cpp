@@ -12,17 +12,17 @@ BOOL CToolBar::CreateEx(
 	CRect /*rcBorders*/,
 	UINT /*nID*/)
 {
-	return FALSE;
+	return TRUE;
 }
 
 BOOL CToolBar::LoadToolBar(LPCTSTR /*lpszResourceName*/)
 {
-	return FALSE;
+	return TRUE;
 }
 
-BOOL CToolBar::LoadToolBar(UINT /*nIDResource*/)
+BOOL CToolBar::LoadToolBar(UINT nIDResource)
 {
-	return FALSE;
+	return LoadToolBar(MAKEINTRESOURCE(nIDResource));
 }
 
 ///////////////////////////////////////////////////////////////////////////

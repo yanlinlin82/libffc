@@ -82,6 +82,8 @@ public:
 
 	HICON SetIcon(HICON hIcon, BOOL bBigIcon);
 
+	BOOL SetMenu(CMenu* pMenu);
+
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual LRESULT WindowProc(UINT msg, WPARAM w, LPARAM l);
@@ -91,11 +93,15 @@ public:
 
 public:
 	DECLARE_MESSAGE_MAP()
+
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT);
 	afx_msg void OnPaint();
 	afx_msg void OnSysCommand(UINT id, LPARAM l);
 	afx_msg void OnNcDestroy();
+
+public:
+	DECLARE_DYNCREATE(CWnd)
 
 public:
 	HWND GetSafeHwnd() const { return m_hWnd; }

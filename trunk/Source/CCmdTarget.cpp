@@ -9,5 +9,7 @@ BOOL CCmdTarget::_ProcessMessage(HWND, UINT, WPARAM, LPARAM, LRESULT&)
 	return FALSE;
 }
 
+IMPLEMENT_DYNCREATE(CCmdTarget, CObject)
+
 ///////////////////////////////////////////////////////////////////////////
 

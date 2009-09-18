@@ -19,6 +19,17 @@ class CObject;
 
 struct CRuntimeClass
 {
+	CRuntimeClass(
+		LPCTSTR lpszClassName,
+		UINT nObjectSize,
+		CRuntimeClass* pBaseClass,
+		CObject* (*pfunCreateObject)())
+		: m_lpszClassName(lpszClassName)
+		, m_nObjectSize(nObjectSize)
+		, m_pBaseClass(pBaseClass)
+		, m_pfnCreateObject(pfunCreateObject)
+	{ }
+
 	LPCTSTR        m_lpszClassName;
 	UINT           m_nObjectSize;
 	CRuntimeClass* m_pBaseClass;
@@ -45,7 +56,11 @@ public: \
 	static CObject* CreateObject();
 
 #define IMPLEMENT_DYNAMIC(className, baseClassName) \
-	CRuntimeClass className::runtime##className; \
+	CRuntimeClass className::runtime##className( \
+		_T(#className), \
+		sizeof(className), \
+		RUNTIME_CLASS(baseClassName), \
+		className::CreateObject); \
 	const CRuntimeClass* className::GetRuntimeClass() const \
 	{ \
 		return &runtime##className; \
@@ -57,7 +72,6 @@ public: \
 	{ \
 		return new className(); \
 	}
-
 
 ///////////////////////////////////////////////////////////////////////////
 

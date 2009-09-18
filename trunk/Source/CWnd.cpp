@@ -13,6 +13,8 @@ RECT CWnd::rectDefault =
 	CW_USEDEFAULT
 };
 
+IMPLEMENT_DYNCREATE(CWnd, CCmdTarget)
+
 ///////////////////////////////////////////////////////////////////////////
 
 std::map<HWND, CWnd*> g_WndMap;
@@ -100,11 +102,24 @@ BOOL CWnd::CreateEx(
 	HMENU nIDorHMenu,
 	LPVOID lpParam)
 {
+	UINT classStyle = CS_HREDRAW | CS_VREDRAW;
+	HCURSOR hCursor = ::LoadCursor(NULL, IDC_ARROW);
+	HBRUSH  hBrush  = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
+	HICON   hIcon   = ::LoadIcon(NULL, IDI_APPLICATION);
+
+	CString className;
 	if (lpszClassName == NULL)
 	{
-		lpszClassName = _T("TestWindow");
+		className.Format(_T("Afx:%x:%x:%x:%x:%x"),
+			AfxGetInstanceHandle(),
+			classStyle,
+			hCursor,
+			hBrush,
+			hIcon);
+		lpszClassName = className;
 	}
-	
+	TRACE(_T("CWnd::CreateEx: %s (%s)\n"), (LPCTSTR)className, GetRuntimeClass()->m_lpszClassName);
+
 	WNDCLASS wndClass;
 	ZeroMemory(&wndClass, sizeof(wndClass));
 	if ( ! ::GetClassInfo(
@@ -112,12 +127,13 @@ BOOL CWnd::CreateEx(
 		lpszClassName,
 		&wndClass))
 	{
-		wndClass.style         = CS_HREDRAW | CS_VREDRAW;
+		wndClass.style         = classStyle;
 		wndClass.lpfnWndProc   = ::WindowProcStart;
 		wndClass.hInstance     = AfxGetInstanceHandle();
 		wndClass.lpszClassName = lpszClassName;
-		wndClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-		wndClass.hCursor       = ::LoadCursor(NULL, IDC_ARROW);
+		wndClass.hbrBackground = hBrush;
+		wndClass.hCursor       = hCursor;
+		wndClass.hIcon         = hIcon;
 		if ( ! ::RegisterClass(&wndClass))
 		{
 			TRACE("RegisterClass failed! Error: %lu\n", ::GetLastError());
@@ -226,6 +242,14 @@ HICON CWnd::SetIcon(HICON hIcon, BOOL bBigIcon)
 		(bBigIcon ? ICON_BIG : ICON_SMALL),
 		reinterpret_cast<LPARAM>(hIcon));
 	return reinterpret_cast<HICON>(r);
+}
+
+BOOL CWnd::SetMenu(CMenu* pMenu)
+{
+	ASSERT(m_hWnd != NULL);
+	ASSERT(pMenu != NULL);
+	ASSERT(pMenu->m_hMenu != NULL);
+	return ::SetMenu(m_hWnd, pMenu->m_hMenu);
 }
 
 ///////////////////////////////////////////////////////////////////////////

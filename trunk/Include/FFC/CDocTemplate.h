@@ -19,10 +19,11 @@ public:
 		CRuntimeClass* pFrameClass,
 		CRuntimeClass* pViewClass);
 
-private:
-	CDocument* m_pDoc;
-	CFrameWnd* m_pFrameWnd;
-	CView*     m_pView;
+public:
+	UINT m_nIDResource;
+	CRuntimeClass* m_pDocClass;
+	CRuntimeClass* m_pFrameClass;
+	CRuntimeClass* m_pViewClass;
 };
 
 ///////////////////////////////////////////////////////////////////////////

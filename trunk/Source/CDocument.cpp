@@ -4,6 +4,8 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+IMPLEMENT_DYNCREATE(CDocument, CCmdTarget)
+
 BOOL CDocument::OnNewDocument()
 {
 	return FALSE;

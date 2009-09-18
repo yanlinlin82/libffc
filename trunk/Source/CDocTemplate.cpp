@@ -5,14 +5,15 @@
 ///////////////////////////////////////////////////////////////////////////
 
 CDocTemplate::CDocTemplate(
-	UINT /*nIDResource*/,
+	UINT nIDResource,
 	CRuntimeClass* pDocClass,
 	CRuntimeClass* pFrameClass,
 	CRuntimeClass* pViewClass)
+	: m_nIDResource(nIDResource)
+	, m_pDocClass(pDocClass)
+	, m_pFrameClass(pFrameClass)
+	, m_pViewClass(pViewClass)
 {
-	m_pDoc      = static_cast<CDocument*>(pDocClass  ->CreateObject());
-	m_pFrameWnd = static_cast<CFrameWnd*>(pFrameClass->CreateObject());
-	m_pView     = static_cast<CView*    >(pViewClass ->CreateObject());
 }
 
 ///////////////////////////////////////////////////////////////////////////

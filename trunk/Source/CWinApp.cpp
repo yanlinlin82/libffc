@@ -22,6 +22,15 @@ CWinApp::CWinApp()
 	g_pApp = this;
 }
 
+CWinApp::~CWinApp()
+{
+	for (size_t i = 0; i < m_DocTemplateList.size(); i++)
+	{
+		delete m_DocTemplateList[i];
+	}
+	m_DocTemplateList.clear();
+}
+
 BOOL CWinApp::InitInstance()
 {
 	return TRUE;
@@ -68,8 +77,9 @@ HICON CWinApp::LoadIcon(UINT nIDResource) const
 	return ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(nIDResource));
 }
 
-void CWinApp::AddDocTemplate(CDocTemplate* /*pTemplate*/)
+void CWinApp::AddDocTemplate(CDocTemplate* pTemplate)
 {
+	m_DocTemplateList.push_back(pTemplate);
 }
 
 void CWinApp::ParseCommandLine(CCommandLineInfo& /*rCmdInfo*/)
@@ -78,7 +88,26 @@ void CWinApp::ParseCommandLine(CCommandLineInfo& /*rCmdInfo*/)
 
 BOOL CWinApp::ProcessShellCommand(CCommandLineInfo& /*rCmdInfo*/)
 {
-	return FALSE;
+	if (m_DocTemplateList.empty())
+	{
+		return FALSE;
+	}
+
+	CDocTemplate* pDocTemplate = m_DocTemplateList.front();
+	
+	TRACE("Create Frame\n");
+	CFrameWnd* pFrameWnd = static_cast<CFrameWnd*>(pDocTemplate->m_pFrameClass->CreateObject());
+	pFrameWnd->LoadFrame(pDocTemplate->m_nIDResource);
+	m_pMainWnd = pFrameWnd;
+
+	TRACE("Create Doc: %p\n", pDocTemplate->m_pDocClass);
+	pDocTemplate->m_pDocClass->CreateObject();
+
+	TRACE("Create View\n");
+	pDocTemplate->m_pViewClass->CreateObject();
+
+	TRACE("ProcessShellCommand OK\n");
+	return TRUE;
 }
 
 ///////////////////////////////////////////////////////////////////////////

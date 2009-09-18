@@ -5,6 +5,7 @@
 
 #include "CDocTemplate.h"
 #include "CCommandLineInfo.h"
+#include <vector>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -24,6 +25,7 @@ class CWinApp : public CWinThread
 {
 public:
 	CWinApp();
+	~CWinApp();
 
 public:
 	virtual BOOL InitInstance();
@@ -58,6 +60,7 @@ protected:
 public:
 	CWnd* m_pMainWnd;
 	int   m_nCmdShow;
+	std::vector<CDocTemplate*> m_DocTemplateList;
 };
 
 ///////////////////////////////////////////////////////////////////////////
