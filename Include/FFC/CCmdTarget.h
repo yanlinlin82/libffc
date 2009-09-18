@@ -11,6 +11,9 @@ class CCmdTarget : public CObject
 {
 public:
 	virtual BOOL _ProcessMessage(HWND hWnd, UINT msg, WPARAM w, LPARAM l, LRESULT& r);
+
+public:
+	DECLARE_DYNCREATE(CCmdTarget)
 };
 
 ///////////////////////////////////////////////////////////////////////////

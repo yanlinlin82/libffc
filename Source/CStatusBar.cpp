@@ -10,7 +10,7 @@ BOOL CStatusBar::Create(
 	DWORD /*dwStyle*/,
 	UINT /*nID*/)
 {
-	return FALSE;
+	return TRUE;
 }
 
 BOOL CStatusBar::CreateEx(
@@ -19,12 +19,12 @@ BOOL CStatusBar::CreateEx(
 	DWORD /*dwStyle*/,
 	UINT /*nID*/)
 {
-	return FALSE;
+	return TRUE;
 }
 
 BOOL CStatusBar::SetIndicators(const UINT* /*lpIDArray*/, int /*nIDCount*/)
 {
-	return FALSE;
+	return TRUE;
 }
 
 ///////////////////////////////////////////////////////////////////////////

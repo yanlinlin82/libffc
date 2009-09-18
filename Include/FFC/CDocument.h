@@ -14,6 +14,9 @@ public:
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	virtual void OnCloseDocument();
+
+public:
+	DECLARE_DYNCREATE(CDocument)
 };
 
 ///////////////////////////////////////////////////////////////////////////

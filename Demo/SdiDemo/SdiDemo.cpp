@@ -73,6 +73,7 @@ BOOL CSdiDemoApp::InitInstance()
 	LoadStdProfileSettings(4);  // Load standard INI file options (including MRU)
 	// Register the application's document templates.  Document templates
 	//  serve as the connection between documents, frame windows and views
+	
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
@@ -82,7 +83,6 @@ BOOL CSdiDemoApp::InitInstance()
 	if (!pDocTemplate)
 		return FALSE;
 	AddDocTemplate(pDocTemplate);
-
 
 
 	// Parse command line for standard shell commands, DDE, file open

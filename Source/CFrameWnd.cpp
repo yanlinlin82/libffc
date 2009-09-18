@@ -11,10 +11,11 @@ BOOL CFrameWnd::Create(
 	const RECT& rect,
 	CWnd* pParentWnd,
 	LPCTSTR lpszMenuName,
-	DWORD /*dwExStyle*/,
+	DWORD dwExStyle,
 	CCreateContext* pContext)
 {
-	return CWnd::Create(
+	return CWnd::CreateEx(
+		dwExStyle,
 		lpszClassName,
 		lpszWindowName,
 		dwStyle,
@@ -25,12 +26,28 @@ BOOL CFrameWnd::Create(
 }
 
 BOOL CFrameWnd::LoadFrame(
-	UINT /*nIDResource*/,
-	DWORD /*dwDefaultStyle*/,
-	CWnd* /*pParentWnd*/,
-	CCreateContext* /*pContext*/)
+	UINT nIDResource,
+	DWORD dwDefaultStyle,
+	CWnd* pParentWnd,
+	CCreateContext* pContext)
 {
-	return FALSE;
+	CString title;
+	title.LoadString(nIDResource);
+	
+	if ( ! Create(NULL, title, dwDefaultStyle,
+		rectDefault, pParentWnd, 0, 0, pContext))
+	{
+		return FALSE;
+	}
+
+	CMenu menu;
+	if ( ! menu.LoadMenu(nIDResource))
+	{
+		return FALSE;
+	}
+	SetMenu(&menu);
+
+	return TRUE;
 }
 
 void CFrameWnd::EnableDocking(DWORD /*dwDockStyle*/)
@@ -54,6 +71,26 @@ void CFrameWnd::OnNcDestroy()
 	::PostQuitMessage(0);
 	delete this;
 }
+
+///////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_DYNCREATE(CFrameWnd, CWnd)
+
+///////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_DYNCREATE(CMDIChildWnd, CFrameWnd)
+
+///////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_DYNCREATE(CMDIFrameWnd, CFrameWnd)
+
+///////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_DYNCREATE(CMiniFrameWnd, CFrameWnd)
+
+///////////////////////////////////////////////////////////////////////////
+
+IMPLEMENT_DYNCREATE(COleIPFrameWnd, CFrameWnd)
 
 ///////////////////////////////////////////////////////////////////////////
 

@@ -32,7 +32,7 @@ CRuntimeClass* FromName(LPCTSTR /*lpszClassName*/)
 
 ///////////////////////////////////////////////////////////////////////////
 
-CRuntimeClass CObject::runtimeCObject;
+CRuntimeClass CObject::runtimeCObject(_T("CObject"), sizeof(CObject), NULL, CObject::CreateObject);
 
 const CRuntimeClass* CObject::GetRuntimeClass() const
 {
