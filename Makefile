@@ -1,25 +1,26 @@
 # Makefile
+
 ROOT	= ./
 
 include Makefile.inc
 
-.PHONY: all
-.PHONY: clean
-
 DEMO	= HelloDemo ConsoleDemo DialogDemo SdiDemo MdiDemo
 
-all:
-	@$(MAKE) --directory=Source
+#--------------------------------------------------------------------------
+
+ifneq ("$(MAKECMDGOALS)", "help")
+  ifneq ("$(MAKECMDGOALS)", "all")
+    ifneq ("$(MAKECMDGOALS)", "clean")
+
+$(MAKECMDGOALS):
+	@$(MAKE) --directory=Source $(MAKECMDGOALS)
 	@for d in $(DEMO:%=Demo/%); \
 	do \
-		$(MAKE) --directory=$$d; \
+		$(MAKE) --directory=$$d $(MAKECMDGOALS); \
 	done
 
-clean:
-	@$(MAKE) --directory=Source clean
-	@for d in $(DEMO:%=Demo/%); \
-	do \
-		$(MAKE) --directory=$$d clean; \
-	done
-	rm -vrf $(TMP_DIR) $(LIB_DIR) $(OUT_DIR)
+    endif
+  endif
+endif
 
+#--------------------------------------------------------------------------

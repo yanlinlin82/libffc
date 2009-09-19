@@ -151,7 +151,10 @@ BOOL CWnd::CreateEx(
 	g_hHook = ::SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, NULL, ::GetCurrentThreadId());
 	g_pWnd = this;
 
-	HWND hWnd = ::CreateWindowEx(
+#ifdef _DEBUG
+	HWND hWnd =
+#endif
+	::CreateWindowEx(
 		dwExStyle,
 		lpszClassName,
 		lpszWindowName,
