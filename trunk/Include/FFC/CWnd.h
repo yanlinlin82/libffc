@@ -71,7 +71,9 @@ public:
 
 	BOOL ShowWindow(int nCmdShow);
 	void UpdateWindow();
+	void GetWindowRect(LPRECT lpRect) const;
 	void GetClientRect(LPRECT lpRect) const;
+	void CenterWindow(CWnd* pAlternateOwner = NULL);
 
 	LRESULT SendMessage(UINT msg, WPARAM w = 0, LPARAM l = 0);
 	LRESULT PostMessage(UINT msg, WPARAM w = 0, LPARAM l = 0);
@@ -90,6 +92,7 @@ public:
 	virtual LRESULT DefWindowProc(UINT msg, WPARAM w, LPARAM l);
 	virtual void PostNcDestroy();
 	virtual void DoDataExchange(CDataExchange* pDX);
+	virtual BOOL OnCommand(WPARAM w, LPARAM l);
 
 public:
 	DECLARE_MESSAGE_MAP()
@@ -120,36 +123,37 @@ public:
 #define ON_WM_CREATE() \
 		if (msg == WM_CREATE) \
 		{ \
-			r = OnCreate(reinterpret_cast<LPCREATESTRUCT>(l)); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) return OnCreate(reinterpret_cast<LPCREATESTRUCT>(l)); \
 		}
 
 #define ON_WM_SYSCOMMAND() \
 		if (msg == WM_SYSCOMMAND) \
 		{ \
-			OnSysCommand(w, l); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) { OnSysCommand(w, l); return 0; } \
 		}
 
 #define ON_WM_PAINT() \
 		if (msg == WM_PAINT) \
 		{ \
-			OnPaint(); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) { OnPaint(); return 0; } \
 		}
 
 #define ON_WM_QUERYDRAGICON() \
 		if (msg == WM_QUERYDRAGICON) \
 		{ \
-			r = reinterpret_cast<LRESULT>(OnQueryDragIcon()); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) return reinterpret_cast<LRESULT>( \
+				static_cast<HICON>(OnQueryDragIcon())); \
 		}
 
 #define ON_WM_NCDESTROY() \
 		if (msg == WM_NCDESTROY) \
 		{ \
-			OnNcDestroy(); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) { OnNcDestroy(); return 0; } \
 		}
 
 ///////////////////////////////////////////////////////////////////////////

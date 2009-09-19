@@ -15,8 +15,8 @@ $(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d: %.cpp
 	@echo "Parsing dependency for $^ ($(CONFIG))"
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	@$(CC) -MM $(INC_DIR:%=-I%) $< -MT $(@:%.d=%.o) > $@
-	@echo -e "\t@[ -d $(@D) ] || mkdir -vp $(@D)" >> $@
-	@echo -e "\t$(CC) $(CFLAGS) $(INC_DIR:%=-I%) $< -o $(@:%.d=%.o)" >> $@
+	@echo "\t@[ -d $(@D) ] || mkdir -vp $(@D)" >> $@
+	@echo "\t$(CC) $(CFLAGS) $(INC_DIR:%=-I%) $< -o $(@:%.d=%.o)" >> $@
 
 endif
 

@@ -7,42 +7,59 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-class CCmdTarget : public CObject
+struct AFX_CMDHANDLERINFO
 {
-public:
-	virtual BOOL _ProcessMessage(HWND hWnd, UINT msg, WPARAM w, LPARAM l, LRESULT& r);
-
-public:
-	DECLARE_DYNCREATE(CCmdTarget)
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
 #define DECLARE_MESSAGE_MAP() \
-	virtual BOOL _ProcessMessage(HWND hWnd, UINT msg, WPARAM w, LPARAM l, LRESULT& r);
+public: \
+	virtual LRESULT _ProcessMessage(CCmdTarget::_ProcessType type, HWND hWnd, UINT msg, WPARAM w, LPARAM l);
+
+#define IMPLEMENT_MESSAGE_MAP(thisClass) \
+	LRESULT thisClass::_ProcessMessage(CCmdTarget::_ProcessType, HWND, UINT, WPARAM, LPARAM) \
+	{ \
+		return FALSE; \
+	}
 
 #define BEGIN_MESSAGE_MAP(thisClass, baseClass) \
-	BOOL thisClass::_ProcessMessage(HWND hWnd, UINT msg, WPARAM w, LPARAM l, LRESULT& r) \
+	LRESULT thisClass::_ProcessMessage(CCmdTarget::_ProcessType type, HWND hWnd, UINT msg, WPARAM w, LPARAM l) \
 	{ \
-		typedef baseClass _base;
+		typedef baseClass _Base;
 
 #define END_MESSAGE_MAP() \
-		return _base::_ProcessMessage(hWnd, msg, w, l, r); \
+		return _Base::_ProcessMessage(type, hWnd, msg, w, l); \
 	}
 
 #define ON_MESSAGE(message, proc) \
 		if (msg == message) \
 		{ \
-			r = proc(w, l); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) return proc(w, l); \
 		}
 
 #define ON_COMMAND(id, proc) \
 		if ((msg == WM_COMMAND) && (LOWORD(w) == id)) \
 		{ \
-			proc(); \
-			return TRUE; \
+			if (type == _Check) return TRUE; \
+			if (type == _Command) { proc(); return 0; } \
 		}
+
+///////////////////////////////////////////////////////////////////////////
+
+class CCmdTarget : public CObject
+{
+public:
+	enum _ProcessType { _Check, _Message, _Command };
+
+	DECLARE_MESSAGE_MAP()
+
+	DECLARE_DYNCREATE(CCmdTarget)
+
+public:
+	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+};
 
 ///////////////////////////////////////////////////////////////////////////
 #endif//__CCMDTARGET_H__

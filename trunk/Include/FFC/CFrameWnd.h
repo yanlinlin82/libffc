@@ -4,7 +4,9 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CWnd.h"
+#include "CView.h"
 #include "CControlBar.h"
+#include <vector>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -37,6 +39,9 @@ public:
 	void DockControlBar(CControlBar* pBar, UINT nDockBarID = 0, LPCRECT lpRect = NULL);
 
 public:
+	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
+
+public:
 	DECLARE_MESSAGE_MAP()
 
 protected:
@@ -44,6 +49,12 @@ protected:
 
 public:
 	DECLARE_DYNCREATE(CFrameWnd)
+
+public:
+	CView* GetActiveView() const;
+
+private:
+	std::vector<CView*> m_ViewList;
 };
 
 ///////////////////////////////////////////////////////////////////////////

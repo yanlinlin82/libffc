@@ -72,9 +72,52 @@ void CFrameWnd::OnNcDestroy()
 	delete this;
 }
 
+BOOL CFrameWnd::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
+{
+	TRACE("CFrameWnd::OnCmdMsg\n");
+	CView* pView = GetActiveView();
+	TRACE("pView = %p\n", pView);
+	if (pView)
+	{
+		if (pView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+		{
+			return TRUE;
+		}
+	}
+
+	TRACE("Call CWnd::OnCmdMsg() in {%s}\n", GetRuntimeClass()->m_lpszClassName);
+	if (CWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	{
+		TRACE("CWnd::OnCmdMsg() return TRUE;\n");
+		return TRUE;
+	}
+
+	CWinApp* pApp = AfxGetApp();
+	TRACE("pApp = %p\n", pApp);
+	if (pApp)
+	{
+		if (pApp->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNCREATE(CFrameWnd, CWnd)
+
+///////////////////////////////////////////////////////////////////////////
+
+CView* CFrameWnd::GetActiveView() const
+{
+	if (m_ViewList.empty())
+	{
+		return NULL;
+	}
+	return m_ViewList.front();
+}
 
 ///////////////////////////////////////////////////////////////////////////
 

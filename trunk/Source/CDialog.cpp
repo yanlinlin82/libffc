@@ -80,6 +80,7 @@ INT_PTR CALLBACK CDialog::_DialogProc(HWND hDlg, UINT msg, WPARAM w, LPARAM)
 
 BOOL CDialog::OnInitDialog()
 {
+	CenterWindow();
 	return TRUE;
 }
 
@@ -87,10 +88,20 @@ INT_PTR CDialog::DoModal()
 {
 	g_pDlg = this;
 
+	HWND hParentWnd = NULL;
+	if (m_pParentWnd)
+	{
+		hParentWnd = m_pParentWnd->GetSafeHwnd();
+	}
+	if ( ! hParentWnd)
+	{
+		hParentWnd = ::GetActiveWindow();
+	}
+
 	return ::DialogBox(
 		AfxGetResourceHandle(),
 		m_lpszTemplateName,
-		(m_pParentWnd ? m_pParentWnd->GetSafeHwnd() : NULL),
+		hParentWnd,
 		_DialogProc);
 }
 
