@@ -224,9 +224,34 @@ LRESULT CWnd::PostMessage(UINT msg, WPARAM w, LPARAM l)
 	return ::PostMessage(m_hWnd, msg, w, l);
 }
 
+void CWnd::GetWindowRect(LPRECT lpRect) const
+{
+	::GetWindowRect(m_hWnd, lpRect);
+}
+
 void CWnd::GetClientRect(LPRECT lpRect) const
 {
 	::GetClientRect(m_hWnd, lpRect);
+}
+
+void CWnd::CenterWindow(CWnd* pAlternateOwner)
+{
+	RECT parentRect = { 0, 0, 0, 0 };
+	if (pAlternateOwner)
+	{
+		pAlternateOwner->GetWindowRect(&parentRect);
+	}
+	else
+	{
+		parentRect.right = ::GetSystemMetrics(SM_CXSCREEN);
+		parentRect.bottom = ::GetSystemMetrics(SM_CYSCREEN);
+	}
+
+	RECT rect;
+	GetWindowRect(&rect);
+	int x = parentRect.left + ((parentRect.right - parentRect.left) - (rect.right - rect.left)) / 2;
+	int y = parentRect.top + ((parentRect.bottom - parentRect.top) - (rect.bottom - rect.top)) / 2;
+	::SetWindowPos(m_hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
 INT_PTR CWnd::MessageBox(LPCTSTR text, LPCTSTR title, int type)
@@ -264,12 +289,15 @@ BOOL CWnd::PreCreateWindow(CREATESTRUCT& /*cs*/)
 
 LRESULT CWnd::WindowProc(UINT msg, WPARAM w, LPARAM l)
 {
-	LRESULT r = 0;
-	if ( ! _ProcessMessage(m_hWnd, msg, w, l, r))
+	if (msg == WM_COMMAND)
 	{
-		return DefWindowProc(msg, w, l);
+		return OnCommand(w, l);
 	}
-	return r;
+	if (_ProcessMessage(_Check, m_hWnd, msg, w, l))
+	{
+		return _ProcessMessage(_Message, m_hWnd, msg, w, l);
+	}
+	return DefWindowProc(msg, w, l);
 }
 
 LRESULT CWnd::DefWindowProc(UINT msg, WPARAM w, LPARAM l)
@@ -313,6 +341,11 @@ void CWnd::OnSysCommand(UINT id, LPARAM l)
 void CWnd::OnNcDestroy()
 {
 	PostNcDestroy();
+}
+
+BOOL CWnd::OnCommand(WPARAM w, LPARAM)
+{
+	return OnCmdMsg(LOWORD(w), HIWORD(w), NULL, NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////
