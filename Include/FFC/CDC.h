@@ -1,6 +1,6 @@
 // CDC.h
-#ifndef __CDC_H__
-#define __CDC_H__
+#ifndef __FFC_CDC_H__
+#define __FFC_CDC_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CObject.h"
@@ -68,5 +68,5 @@ class CWindowDC : public CDC
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CDC_H__
+#endif//__FFC_CDC_H__
 

@@ -31,30 +31,5 @@
 #include "FFC/CWinApp.h"
 
 ///////////////////////////////////////////////////////////////////////////
-
-class CSplitterWnd : public CWnd
-{
-};
-
-///////////////////////////////////////////////////////////////////////////
-
-class CPropertySheet : public CWnd
-{
-};
-
-///////////////////////////////////////////////////////////////////////////
-
-CWinApp*  AFXAPI AfxGetApp();
-HINSTANCE AFXAPI AfxGetInstanceHandle();
-HINSTANCE AFXAPI AfxGetResourceHandle();
-
-void AFXAPI AfxEnableControlContainer();
-
-BOOL AFXAPI AfxOleInit();
-
-int AFXAPI AfxMessageBox(LPCTSTR lpszText, UINT nType = MB_OK, UINT nIDHelp = 0);
-int AFXAPI AfxMessageBox(UINT nIDPrompt, UINT nType = MB_OK, UINT nIDHelp = (UINT) -1);
-
-///////////////////////////////////////////////////////////////////////////
 #endif//__AFXWIN_H__
 

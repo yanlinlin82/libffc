@@ -1,6 +1,6 @@
 // CDialog.h
-#ifndef __CDIALOG_H__
-#define __CDIALOG_H__
+#ifndef __FFC_CDIALOG_H__
+#define __FFC_CDIALOG_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CWnd.h"
@@ -106,5 +106,5 @@ class CDHtmlDialog : public CDialog
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CDIALOG_H__
+#endif//__FFC_CDIALOG_H__
 

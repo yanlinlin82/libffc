@@ -1,6 +1,7 @@
-// AfxApi.cpp
+// Globals.cpp
 
-#include "../Include/afx.h"
+#include "../Include/FFC/Globals.h"
+#include "../Include/FFC/CString.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -20,38 +21,16 @@ BOOL AFXAPI AfxWinInit(HINSTANCE hInst, HINSTANCE, LPTSTR lpCmdLine, int nCmdSho
 	return TRUE;
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 HINSTANCE AFXAPI AfxGetInstanceHandle()
 {
 	return g_hInst;
 }
 
-void AFXAPI AfxEnableControlContainer()
-{
-}
-
 HINSTANCE AfxGetResourceHandle()
 {
 	return ::GetModuleHandle(NULL);
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-BOOL AFXAPI AfxOleInit()
-{
-	HRESULT hr = ::CoInitialize(NULL);
-	return SUCCEEDED(hr);
-}
-
-int AFXAPI AfxMessageBox(LPCTSTR lpszText, UINT nType, UINT /*nIDHelp*/)
-{
-	return ::MessageBox(NULL, lpszText, NULL, nType);
-}
-
-int AFXAPI AfxMessageBox(UINT nIDPrompt, UINT nType, UINT nIDHelp)
-{
-	CString text;
-	text.LoadString(nIDPrompt);
-	return AfxMessageBox(text, nType, nIDHelp);
 }
 
 ///////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 // CFrameWnd.h
-#ifndef __CFRAMEWND_H__
-#define __CFRAMEWND_H__
+#ifndef __FFC_CFRAMEWND_H__
+#define __FFC_CFRAMEWND_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CWnd.h"
@@ -90,5 +90,5 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CFRAMEWND_H__
+#endif//__FFC_CFRAMEWND_H__
 

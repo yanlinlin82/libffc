@@ -1,6 +1,6 @@
 // CGDIObject.h
-#ifndef __CGDIOBJECT_H__
-#define __CGDIOBJECT_H__
+#ifndef __FFC_CGDIOBJECT_H__
+#define __FFC_CGDIOBJECT_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CObject.h"
@@ -48,5 +48,5 @@ class CBitmap : public CGdiObject
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CGDIOBJECT_H__
+#endif//__FFC_CGDIOBJECT_H__
 

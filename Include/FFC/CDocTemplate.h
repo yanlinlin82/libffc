@@ -1,16 +1,13 @@
 // CDocTemplate.h
-#ifndef __CDOCTEMPLATE_H__
-#define __CDOCTEMPLATE_H__
+#ifndef __FFC_CDOCTEMPLATE_H__
+#define __FFC_CDOCTEMPLATE_H__
 ///////////////////////////////////////////////////////////////////////////
 
-#include "CObject.h"
-#include "CDocument.h"
-#include "CFrameWnd.h"
-#include "CView.h"
+#include "CCmdTarget.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-class CDocTemplate : public CObject
+class CDocTemplate : public CCmdTarget
 {
 public:
 	CDocTemplate(
@@ -51,5 +48,5 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CDOCTEMPLATE_H__
+#endif//__FFC_CDOCTEMPLATE_H__
 
