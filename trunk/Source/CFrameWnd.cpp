@@ -4,6 +4,13 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+BOOL CFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
+{
+	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, 0,
+		reinterpret_cast<HBRUSH>(COLOR_APPWORKSPACE + 1), 0);
+	return TRUE;
+}
+
 BOOL CFrameWnd::Create(
 	LPCTSTR lpszClassName,
 	LPCTSTR lpszWindowName,
@@ -35,7 +42,7 @@ BOOL CFrameWnd::LoadFrame(
 	title.LoadString(nIDResource);
 	
 	if ( ! Create(NULL, title, dwDefaultStyle,
-		rectDefault, pParentWnd, 0, 0, pContext))
+		rectDefault, pParentWnd, 0, WS_EX_CLIENTEDGE, pContext))
 	{
 		return FALSE;
 	}
