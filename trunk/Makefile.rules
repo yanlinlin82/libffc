@@ -12,11 +12,11 @@ ifneq ("$(DEPEND)", "")
 sinclude $(MODULES:%.cpp=$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d)
 
 $(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d: %.cpp
-	@echo "Parsing dependency for $^ ($(CONFIG))"
+	@echo "Parsing dependency for $< ($(CONFIG))"
 	@[ -d $(@D) ] || mkdir -p $(@D)
-	@$(CC) -MM $(INC_DIR:%=-I%) $< -MT $(@:%.d=%.o) > $@
-	@echo "\t@[ -d $(@D) ] || mkdir -vp $(@D)" >> $@
-	@echo "\t$(CC) $(CFLAGS) $(INC_DIR:%=-I%) $< -o $(@:%.d=%.o)" >> $@
+	@$(CC) -MM $(INC_DIR:%=-I%) $< -MT $(@:%.d=%.o) > $@.tmp
+	@sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.tmp > $@
+	@rm -f $@.tmp
 
 endif
 
@@ -44,6 +44,10 @@ $(TARGET): $(OBJECTS) $(RES) $(LIB_DIR)$(CONFIG)/libffc.a
 	@[ -d $(@D) ] || mkdir -pv $(@D)
 	$(CC) $(LFLAGS) $^ $(LIB_DIR:%=-L%$(CONFIG)) $(LIBS:%=-l%) -o $@
 endif
+
+$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.o: %.cpp
+	@[ -d $(@D) ] || mkdir -pv $(@D)
+	$(CC) $(CFLAGS) $(INC_DIR:%=-I%) $< -o $@
 
 $(TMP_DIR)$(CONFIG)/$(PROJECT)/%.rsc: %.rc
 	@[ -d $(@D) ] || mkdir -pv $(@D)

@@ -2,7 +2,7 @@
 
 #--------------------------------------------------------------------------
 
-COMMAND_PREFIX	= i586-mingw32msvc-
+#COMMAND_PREFIX	= i586-mingw32msvc-
 
 CC	= $(COMMAND_PREFIX)g++
 RC	= $(COMMAND_PREFIX)windres
