@@ -12,7 +12,7 @@ PROJECT		= DialogDemo
 TARGET		= $(OUT_DIR)$(CONFIG)/$(PROJECT).exe
 MODULES		= $(wildcard *.cpp)
 RESOURCE	= $(wildcard *.rc)
-LIBS		= ffc ole32 comctl32
+LIBS		= ffc comctl32
 
 #--------------------------------------------------------------------------
 

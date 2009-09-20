@@ -1,6 +1,6 @@
 // CWnd.h
-#ifndef __CWND_H__
-#define __CWND_H__
+#ifndef __FFC_CWND_H__
+#define __FFC_CWND_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CCmdTarget.h"
@@ -120,42 +120,16 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-#define ON_WM_CREATE() \
-		if (msg == WM_CREATE) \
-		{ \
-			if (type == _Check) return TRUE; \
-			if (type == _Message) return OnCreate(reinterpret_cast<LPCREATESTRUCT>(l)); \
-		}
-
-#define ON_WM_SYSCOMMAND() \
-		if (msg == WM_SYSCOMMAND) \
-		{ \
-			if (type == _Check) return TRUE; \
-			if (type == _Message) { OnSysCommand(w, l); return 0; } \
-		}
-
-#define ON_WM_PAINT() \
-		if (msg == WM_PAINT) \
-		{ \
-			if (type == _Check) return TRUE; \
-			if (type == _Message) { OnPaint(); return 0; } \
-		}
-
-#define ON_WM_QUERYDRAGICON() \
-		if (msg == WM_QUERYDRAGICON) \
-		{ \
-			if (type == _Check) return TRUE; \
-			if (type == _Message) return reinterpret_cast<LRESULT>( \
-				static_cast<HICON>(OnQueryDragIcon())); \
-		}
-
-#define ON_WM_NCDESTROY() \
-		if (msg == WM_NCDESTROY) \
-		{ \
-			if (type == _Check) return TRUE; \
-			if (type == _Message) { OnNcDestroy(); return 0; } \
-		}
+class CSplitterWnd : public CWnd
+{
+};
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CWND_H__
+
+class CPropertySheet : public CWnd
+{
+};
+
+///////////////////////////////////////////////////////////////////////////
+#endif//__FFC_CWND_H__
 

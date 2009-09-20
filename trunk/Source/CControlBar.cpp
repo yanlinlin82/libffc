@@ -1,6 +1,6 @@
 // CControlBar.cpp
 
-#include "../Include/afxcmn.h"
+#include "../Include/FFC/CControlBar.h"
 
 ///////////////////////////////////////////////////////////////////////////
 

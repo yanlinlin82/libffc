@@ -1,9 +1,13 @@
 // CControlBar.h
-#ifndef __CCONTROLBAR_H__
-#define __CCONTROLBAR_H__
+#ifndef __FFC_CCONTROLBAR_H__
+#define __FFC_CCONTROLBAR_H__
 ///////////////////////////////////////////////////////////////////////////
 
-#include <commctrl.h>
+#include "Resource.h"
+#include "CControls.h"
+#include "CRect.h"
+
+///////////////////////////////////////////////////////////////////////////
 
 #ifndef TBSTYLE_FLAT
 #define TBSTYLE_FLAT 0x0800
@@ -77,5 +81,5 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CCONTROLBAR_H__
+#endif//__FFC_CCONTROLBAR_H__
 

@@ -1,16 +1,16 @@
-// CFile.h
-#ifndef __FFC_CFILE_H__
-#define __FFC_CFILE_H__
+// CWinThread.h
+#ifndef __FFC_CWINTHREAD_H__
+#define __FFC_CWINTHREAD_H__
 ///////////////////////////////////////////////////////////////////////////
 
-#include "CObject.h"
+#include "CCmdTarget.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-class CFile : public CObject
+class CWinThread : public CCmdTarget
 {
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__FFC_CFILE_H__
+#endif//__FFC_CWINTHREAD_H__
 

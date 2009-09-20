@@ -1,6 +1,6 @@
 // CCommandLineInfo.h
-#ifndef __CCOMMANDLINEINFO_H__
-#define __CCOMMANDLINEINFO_H__
+#ifndef __FFC_CCOMMANDLINEINFO_H__
+#define __FFC_CCOMMANDLINEINFO_H__
 ///////////////////////////////////////////////////////////////////////////
 
 #include "CObject.h"
@@ -44,5 +44,5 @@ public:
 };
 
 ///////////////////////////////////////////////////////////////////////////
-#endif//__CCOMMANDLINEINFO_H__
+#endif//__FFC_CCOMMANDLINEINFO_H__
 

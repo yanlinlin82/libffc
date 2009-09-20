@@ -12,7 +12,7 @@ PROJECT		= ConsoleDemo
 TARGET		= $(OUT_DIR)$(CONFIG)/$(PROJECT).exe
 MODULES		= $(wildcard *.cpp)
 RESOURCE	= $(wildcard *.rc)
-LIBS		= ffc ole32
+LIBS		= ffc
 
 #--------------------------------------------------------------------------
 
