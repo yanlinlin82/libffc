@@ -89,6 +89,41 @@ BOOL CWnd::Create(
 	return CreateEx(0, lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 }
 
+BOOL AFXAPI AfxRegisterClass(WNDCLASS* lpWndClass)
+{
+	return (::RegisterClass(lpWndClass) != 0);
+}
+
+LPCTSTR AFXAPI AfxRegisterWndClass(UINT classStyle, HCURSOR hCursor, HBRUSH hBrush, HICON hIcon)
+{
+	HINSTANCE hInst = AfxGetInstanceHandle();
+
+	CONST SIZE_T BUFFER_SIZE = 64;
+	static TCHAR className[BUFFER_SIZE] = _T("");
+	wsprintf(className, _T("Afx:%x:%x:%x:%x:%x"),
+		hInst, classStyle, hCursor, hBrush, hIcon);
+	TRACE(_T("AfxRegisterWndClass: %s\n"), className);
+
+	WNDCLASS wndClass;
+	ZeroMemory(&wndClass, sizeof(wndClass));
+	if ( ! ::GetClassInfo(hInst, className, &wndClass))
+	{
+		wndClass.style         = classStyle;
+		wndClass.lpfnWndProc   = ::WindowProcStart;
+		wndClass.hInstance     = hInst;
+		wndClass.lpszClassName = className;
+		wndClass.hbrBackground = (hBrush ? hBrush : reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1));
+		wndClass.hCursor       = (hCursor ? hCursor : ::LoadCursor(NULL, IDC_ARROW));
+		wndClass.hIcon         = (hIcon ? hIcon : ::LoadIcon(NULL, IDI_APPLICATION));
+		if ( ! ::RegisterClass(&wndClass))
+		{
+			TRACE("RegisterClass failed! Error: %lu\n", ::GetLastError());
+			return NULL;
+		}
+	}
+	return className;
+}
+
 BOOL CWnd::CreateEx(
 	DWORD dwExStyle,
 	LPCTSTR lpszClassName,
@@ -102,50 +137,27 @@ BOOL CWnd::CreateEx(
 	HMENU nIDorHMenu,
 	LPVOID lpParam)
 {
-	UINT classStyle = CS_HREDRAW | CS_VREDRAW;
-	HCURSOR hCursor = ::LoadCursor(NULL, IDC_ARROW);
-	HBRUSH  hBrush  = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-	HICON   hIcon   = ::LoadIcon(NULL, IDI_APPLICATION);
-
-	CString className;
-	if (lpszClassName == NULL)
-	{
-		className.Format(_T("Afx:%x:%x:%x:%x:%x"),
-			AfxGetInstanceHandle(),
-			classStyle,
-			hCursor,
-			hBrush,
-			hIcon);
-		lpszClassName = className;
-	}
-	TRACE(_T("CWnd::CreateEx: %s (%s)\n"), (LPCTSTR)className, GetRuntimeClass()->m_lpszClassName);
-
-	WNDCLASS wndClass;
-	ZeroMemory(&wndClass, sizeof(wndClass));
-	if ( ! ::GetClassInfo(
-		AfxGetInstanceHandle(),
-		lpszClassName,
-		&wndClass))
-	{
-		wndClass.style         = classStyle;
-		wndClass.lpfnWndProc   = ::WindowProcStart;
-		wndClass.hInstance     = AfxGetInstanceHandle();
-		wndClass.lpszClassName = lpszClassName;
-		wndClass.hbrBackground = hBrush;
-		wndClass.hCursor       = hCursor;
-		wndClass.hIcon         = hIcon;
-		if ( ! ::RegisterClass(&wndClass))
-		{
-			TRACE("RegisterClass failed! Error: %lu\n", ::GetLastError());
-			return FALSE;
-		}
-	}
-
 	CREATESTRUCT cs;
-	ZeroMemory(&cs, sizeof(cs));
+	cs.lpCreateParams = lpParam;
+	cs.hInstance      = AfxGetInstanceHandle();
+	cs.hMenu          = nIDorHMenu;
+	cs.hwndParent     = hWndParent;
+	cs.cx             = nWidth;
+	cs.cy             = nHeight;
+	cs.x              = x;
+	cs.y              = y;
+	cs.style          = dwStyle;
+	cs.dwExStyle      = dwExStyle;
+	cs.lpszName       = lpszWindowName;
+	cs.lpszClass      = lpszClassName;
 	if ( ! PreCreateWindow(cs))
 	{
 		return FALSE;
+	}
+
+	if ( ! cs.lpszClass)
+	{
+		cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW);
 	}
 
 	g_hHook = ::SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, NULL, ::GetCurrentThreadId());
@@ -155,15 +167,15 @@ BOOL CWnd::CreateEx(
 	HWND hWnd =
 #endif
 	::CreateWindowEx(
-		dwExStyle,
-		lpszClassName,
-		lpszWindowName,
-		dwStyle,
-		x, y, nWidth, nHeight,
-		hWndParent,
-		nIDorHMenu,
-		AfxGetInstanceHandle(),
-		lpParam);
+		cs.dwExStyle,
+		cs.lpszClass,
+		cs.lpszName,
+		cs.style,
+		cs.x, cs.y, cs.cx, cs.cy,
+		cs.hwndParent,
+		cs.hMenu,
+		cs.hInstance,
+		cs.lpCreateParams);
 
 	ASSERT(hWnd == m_hWnd);
 	::UnhookWindowsHookEx(g_hHook);
@@ -195,89 +207,6 @@ BOOL CWnd::CreateEx(
 		(pParentWnd ? pParentWnd->GetSafeHwnd() : NULL),
 		reinterpret_cast<HMENU>(nID),
 		lpParam);
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-BOOL CWnd::IsIconic() const
-{
-	return ::IsIconic(m_hWnd);
-}
-
-BOOL CWnd::ShowWindow(int nCmdShow)
-{
-	return ::ShowWindow(m_hWnd, nCmdShow);
-}
-
-void CWnd::UpdateWindow()
-{
-	::UpdateWindow(m_hWnd);
-}
-
-LRESULT CWnd::SendMessage(UINT msg, WPARAM w, LPARAM l)
-{
-	return ::SendMessage(m_hWnd, msg, w, l);
-}
-
-LRESULT CWnd::PostMessage(UINT msg, WPARAM w, LPARAM l)
-{
-	return ::PostMessage(m_hWnd, msg, w, l);
-}
-
-void CWnd::GetWindowRect(LPRECT lpRect) const
-{
-	::GetWindowRect(m_hWnd, lpRect);
-}
-
-void CWnd::GetClientRect(LPRECT lpRect) const
-{
-	::GetClientRect(m_hWnd, lpRect);
-}
-
-void CWnd::CenterWindow(CWnd* pAlternateOwner)
-{
-	RECT parentRect = { 0, 0, 0, 0 };
-	if (pAlternateOwner)
-	{
-		pAlternateOwner->GetWindowRect(&parentRect);
-	}
-	else
-	{
-		parentRect.right = ::GetSystemMetrics(SM_CXSCREEN);
-		parentRect.bottom = ::GetSystemMetrics(SM_CYSCREEN);
-	}
-
-	RECT rect;
-	GetWindowRect(&rect);
-	int x = parentRect.left + ((parentRect.right - parentRect.left) - (rect.right - rect.left)) / 2;
-	int y = parentRect.top + ((parentRect.bottom - parentRect.top) - (rect.bottom - rect.top)) / 2;
-	::SetWindowPos(m_hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-}
-
-INT_PTR CWnd::MessageBox(LPCTSTR text, LPCTSTR title, int type)
-{
-	return ::MessageBox(m_hWnd, text, title, type);
-}
-
-CMenu* CWnd::GetSystemMenu(BOOL /*bRevert*/) const
-{
-	return NULL;
-}
-
-HICON CWnd::SetIcon(HICON hIcon, BOOL bBigIcon)
-{
-	LRESULT r = ::SendMessage(m_hWnd, WM_SETICON,
-		(bBigIcon ? ICON_BIG : ICON_SMALL),
-		reinterpret_cast<LPARAM>(hIcon));
-	return reinterpret_cast<HICON>(r);
-}
-
-BOOL CWnd::SetMenu(CMenu* pMenu)
-{
-	ASSERT(m_hWnd != NULL);
-	ASSERT(pMenu != NULL);
-	ASSERT(pMenu->m_hMenu != NULL);
-	return ::SetMenu(m_hWnd, pMenu->m_hMenu);
 }
 
 ///////////////////////////////////////////////////////////////////////////
