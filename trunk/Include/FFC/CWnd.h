@@ -22,8 +22,28 @@ class CDataExchange
 
 ///////////////////////////////////////////////////////////////////////////
 
-struct CCreateContext
+class CDocument;
+class CDocTemplate;
+class CView;
+class CFrameWnd;
+
+class CCreateContext
 {
+public:
+	CCreateContext()
+		: m_pNewViewClass(NULL)
+		, m_pCurrentDoc(NULL)
+		, m_pNewDocTemplate(NULL)
+		, m_pLastView(NULL)
+		, m_pCurrentFrame(NULL)
+	{ }
+
+public:
+	CRuntimeClass* m_pNewViewClass;
+	CDocument*     m_pCurrentDoc;
+	CDocTemplate*  m_pNewDocTemplate;
+	CView*         m_pLastView;
+	CFrameWnd*     m_pCurrentFrame;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -125,6 +145,10 @@ public:
 
 	static RECT rectDefault;
 };
+
+///////////////////////////////////////////////////////////////////////////
+
+CWnd* AFXAPI AfxGetMainWnd();
 
 ///////////////////////////////////////////////////////////////////////////
 

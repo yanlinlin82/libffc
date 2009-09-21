@@ -65,6 +65,13 @@ void CFrameWnd::DockControlBar(CControlBar* /*pBar*/, UINT /*nDockBarID*/, LPCRE
 {
 }
 
+CWnd* CFrameWnd::CreateView(CCreateContext* pContext, UINT /*nID*/)
+{
+	ASSERT(pContext->m_pNewViewClass->IsDerivedFrom(RUNTIME_CLASS(CView)));
+	CView* pView = static_cast<CView*>(pContext->m_pNewViewClass->CreateObject());
+	return pView;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_MESSAGE_MAP(CFrameWnd, CWnd)

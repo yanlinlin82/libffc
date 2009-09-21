@@ -7,6 +7,11 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+class CDocument;
+class CFrameWnd;
+
+///////////////////////////////////////////////////////////////////////////
+
 class CDocTemplate : public CCmdTarget
 {
 public:
@@ -15,6 +20,10 @@ public:
 		CRuntimeClass* pDocClass,
 		CRuntimeClass* pFrameClass,
 		CRuntimeClass* pViewClass);
+
+public:
+	virtual CDocument* CreateNewDocument();
+	virtual CFrameWnd* CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther);
 
 public:
 	UINT m_nIDResource;
@@ -33,6 +42,9 @@ public:
 		CRuntimeClass* pDocClass,
 		CRuntimeClass* pFrameClass,
 		CRuntimeClass* pViewClass);
+public:
+	virtual CDocument* CreateNewDocument();
+	virtual CFrameWnd* CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther);
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -45,6 +57,9 @@ public:
 		CRuntimeClass* pDocClass,
 		CRuntimeClass* pFrameClass,
 		CRuntimeClass* pViewClass);
+public:
+	virtual CDocument* CreateNewDocument();
+	virtual CFrameWnd* CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther);
 };
 
 ///////////////////////////////////////////////////////////////////////////
