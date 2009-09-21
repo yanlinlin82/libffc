@@ -95,18 +95,10 @@ BOOL CWinApp::ProcessShellCommand(CCommandLineInfo& /*rCmdInfo*/)
 
 	CDocTemplate* pDocTemplate = m_DocTemplateList.front();
 	
-	TRACE("Create Frame\n");
-	CFrameWnd* pFrameWnd = static_cast<CFrameWnd*>(pDocTemplate->m_pFrameClass->CreateObject());
-	pFrameWnd->LoadFrame(pDocTemplate->m_nIDResource);
-	m_pMainWnd = pFrameWnd;
-
 	TRACE("Create Doc: %p\n", pDocTemplate->m_pDocClass);
-	pDocTemplate->m_pDocClass->CreateObject();
-
-	TRACE("Create View\n");
-	pDocTemplate->m_pViewClass->CreateObject();
-
-	TRACE("ProcessShellCommand OK\n");
+	CDocument* pDoc = pDocTemplate->CreateNewDocument();
+	
+	m_pMainWnd = pDocTemplate->CreateNewFrame(pDoc, NULL);
 	return TRUE;
 }
 

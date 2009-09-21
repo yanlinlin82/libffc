@@ -24,17 +24,29 @@ class CDumpContext
 
 class CObject;
 
-struct CRuntimeClass
+class CRuntimeClass
 {
+public:
+	CRuntimeClass(
+		LPCTSTR lpszClassName,
+		UINT nObjectSize,
+		CRuntimeClass* pBaseClass,
+		CObject* (*pfnCreateObject)());
+
+public:
+	CObject* CreateObject() const;
+	BOOL IsDerivedFrom(const CRuntimeClass* pBaseClass) const;
+	static CRuntimeClass* FromName(LPCTSTR lpszClassName);
+
+public:
 	LPCTSTR        m_lpszClassName;
 	UINT           m_nObjectSize;
 	CRuntimeClass* m_pBaseClass;
 
 	CObject* (*m_pfnCreateObject)();
 
-	CObject* CreateObject() const;
-	BOOL IsDerivedFrom(const CRuntimeClass* pBaseClass) const;
-	static CRuntimeClass* FromName(LPCTSTR lpszClassName);
+	CRuntimeClass* m_pNextClass;
+	static CRuntimeClass* m_pFirstClass;
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,13 +64,11 @@ public: \
 	static CObject* CreateObject();
 
 #define IMPLEMENT_DYNAMIC(className, baseClassName) \
-	CRuntimeClass className::runtime##className = \
-	{ \
+	CRuntimeClass className::runtime##className( \
 		_T(#className), \
 		sizeof(className), \
 		RUNTIME_CLASS(baseClassName), \
-		className::CreateObject \
-	}; \
+		className::CreateObject); \
 	const CRuntimeClass* className::GetRuntimeClass() const \
 	{ \
 		return &runtime##className; \

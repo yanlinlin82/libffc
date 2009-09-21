@@ -185,5 +185,16 @@
 #define ID_VIEW_STATUS_BAR              0xE802
 
 ///////////////////////////////////////////////////////////////////////////
+
+#define AFX_IDW_PANE_FIRST              0xE900 // first pane (256 max) 
+#define AFX_IDW_PANE_LAST               0xE9FF
+
+#define AFX_IDW_HSCROLL_FIRST           0xEA00  // first Horz scrollbar (16 max) 
+#define AFX_IDW_VSCROLL_FIRST           0xEA10  // first Vert scrollbar (16 max) 
+ 
+#define AFX_IDW_SIZE_BOX                0xEA20  // size box for splitters 
+#define AFX_IDW_PANE_SAVE               0xEA21  // to shift AFX_IDW_PANE_FIRST 
+
+///////////////////////////////////////////////////////////////////////////
 #endif//__FFC_RESOURCE_H__
 
