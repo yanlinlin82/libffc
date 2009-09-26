@@ -6,27 +6,33 @@
 #include "CWnd.h"
 #include "CDocument.h"
 #include "CPrintInfo.h"
+#include "CDC.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
 class CView : public CWnd
 {
-public:
-	BOOL DoPreparePrinting(CPrintInfo* pInfo);
-	CDocument* GetDocument( ) const;
+protected:
+	CView();
 
 public:
+	BOOL DoPreparePrinting(CPrintInfo* pInfo);
+	CDocument* GetDocument() const;
+
+protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+	virtual void OnDraw(CDC* pDC) = 0;
 
 public:
 	DECLARE_MESSAGE_MAP()
 
 protected:
+	afx_msg void OnPaint();
 	afx_msg void OnFilePrint();
 	afx_msg void OnFilePrintPreview();
 
 public:
-	DECLARE_DYNCREATE(CView)
+	DECLARE_DYNAMIC(CView)
 
 public:
 	CDocument* m_pDocument;
@@ -38,6 +44,9 @@ class CCtrlView : public CView
 {
 public:
 	DECLARE_DYNCREATE(CCtrlView)
+
+protected:
+	virtual void OnDraw(CDC*) { }
 };
 
 class CEditView : public CCtrlView
@@ -70,6 +79,9 @@ class CScrollView : public CView
 {
 public:
 	DECLARE_DYNCREATE(CScrollView)
+
+protected:
+	virtual void OnDraw(CDC*) { }
 };
 
 class CFormView : public CScrollView

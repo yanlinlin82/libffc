@@ -98,7 +98,7 @@ BOOL CWinApp::ProcessShellCommand(CCommandLineInfo& /*rCmdInfo*/)
 	TRACE("Create Doc: %p\n", pDocTemplate->m_pDocClass);
 	CDocument* pDoc = pDocTemplate->CreateNewDocument();
 	
-	m_pMainWnd = pDocTemplate->CreateNewFrame(pDoc, NULL);
+	pDocTemplate->CreateNewFrame(pDoc, NULL);
 	return TRUE;
 }
 

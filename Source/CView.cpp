@@ -4,12 +4,17 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+CView::CView()
+	: m_pDocument(NULL)
+{
+}
+
 BOOL CView::DoPreparePrinting(CPrintInfo* /*pInfo*/)
 {
 	return TRUE;
 }
 
-CDocument* CView::GetDocument( ) const
+CDocument* CView::GetDocument() const
 {
 	return m_pDocument;
 }
@@ -20,9 +25,16 @@ BOOL CView::OnPreparePrinting(CPrintInfo* pInfo)
 }
 
 BEGIN_MESSAGE_MAP(CView, CWnd)
+	ON_WM_PAINT()
 	ON_COMMAND(ID_FILE_PRINT, OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, OnFilePrintPreview)
 END_MESSAGE_MAP()
+
+void CView::OnPaint()
+{
+	CPaintDC dc(this);
+	OnDraw(&dc);
+}
 
 void CView::OnFilePrint()
 {
@@ -32,7 +44,7 @@ void CView::OnFilePrintPreview()
 {
 }
 
-IMPLEMENT_DYNCREATE(CView, CWnd)
+IMPLEMENT_DYNAMIC(CView, CWnd)
 
 ///////////////////////////////////////////////////////////////////////////
 

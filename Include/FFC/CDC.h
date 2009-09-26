@@ -15,6 +15,9 @@ public:
 	CDC();
 
 public:
+	virtual BOOL TextOut(int x, int y, LPCTSTR text, int count);
+	BOOL TextOut(int x, int y, const CString& text);
+
 	virtual int DrawText(
 		LPCTSTR lpszString,
 		int nCount,

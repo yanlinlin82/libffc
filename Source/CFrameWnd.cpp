@@ -4,13 +4,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL CFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
-{
-	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW, 0,
-		reinterpret_cast<HBRUSH>(COLOR_APPWORKSPACE + 1), 0);
-	return TRUE;
-}
-
 BOOL CFrameWnd::Create(
 	LPCTSTR lpszClassName,
 	LPCTSTR lpszWindowName,
@@ -65,20 +58,37 @@ void CFrameWnd::DockControlBar(CControlBar* /*pBar*/, UINT /*nDockBarID*/, LPCRE
 {
 }
 
-CWnd* CFrameWnd::CreateView(CCreateContext* pContext, UINT /*nID*/)
+CWnd* CFrameWnd::CreateView(CCreateContext* pContext, UINT nID)
 {
 	ASSERT(pContext->m_pNewViewClass->IsDerivedFrom(RUNTIME_CLASS(CView)));
 	CView* pView = static_cast<CView*>(pContext->m_pNewViewClass->CreateObject());
+	pView->m_pDocument = pContext->m_pCurrentDoc;
+	CRect rect;
+	GetClientRect(rect);
+	TRACE("Create View\n");
+	pView->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, rect, this, nID);
+	m_ViewList.push_back(pView);
 	return pView;
 }
 
 ///////////////////////////////////////////////////////////////////////////
 
 BEGIN_MESSAGE_MAP(CFrameWnd, CWnd)
+	ON_WM_SIZE()
 	ON_WM_NCDESTROY()
 END_MESSAGE_MAP()
 
 ///////////////////////////////////////////////////////////////////////////
+
+void CFrameWnd::OnSize(UINT type, int cx, int cy)
+{
+	CWnd::OnSize(type, cx, cy);
+	CView* pView = GetActiveView();
+	if (pView)
+	{
+		pView->MoveWindow(0, 0, cx, cy);
+	}
+}
 
 void CFrameWnd::OnNcDestroy()
 {
@@ -137,9 +147,31 @@ CView* CFrameWnd::GetActiveView() const
 
 IMPLEMENT_DYNCREATE(CMDIChildWnd, CFrameWnd)
 
+LRESULT CMDIChildWnd::DefWindowProc(UINT msg, WPARAM w, LPARAM l)
+{
+	return ::DefMDIChildProc(m_hWnd, msg, w, l);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 IMPLEMENT_DYNCREATE(CMDIFrameWnd, CFrameWnd)
+
+BEGIN_MESSAGE_MAP(CMDIFrameWnd, CFrameWnd)
+	ON_WM_SIZE()
+END_MESSAGE_MAP()
+
+void CMDIFrameWnd::OnSize(UINT, int x, int y)
+{
+	if (m_MDIClient.GetSafeHwnd())
+	{
+		m_MDIClient.MoveWindow(0, 0, x, y);
+	}
+}
+
+LRESULT CMDIFrameWnd::DefWindowProc(UINT msg, WPARAM w, LPARAM l)
+{
+	return ::DefFrameProc(m_hWnd, m_MDIClient.m_hWnd, msg, w, l);
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
