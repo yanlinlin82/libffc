@@ -9,6 +9,16 @@ CDC::CDC()
 {
 }
 
+BOOL CDC::TextOut(int x, int y, LPCTSTR text, int count)
+{
+	return ::TextOut(m_hDC, x, y, text, count);
+}
+
+BOOL CDC::TextOut(int x, int y, const CString& text)
+{
+	return TextOut(x, y, text, text.GetLength());
+}
+
 int CDC::DrawText(
 	LPCTSTR lpszString,
 	int nCount,

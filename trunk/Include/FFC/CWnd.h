@@ -97,6 +97,9 @@ public:
 public:
 	BOOL IsIconic() const;
 
+	void MoveWindow(int x, int y, int w, int h, BOOL repaint = TRUE);
+	void MoveWindow(LPCRECT pRect, BOOL repaint = TRUE);
+	BOOL SetWindowPos(const CWnd* pWndInsertAfter, int x, int y, int cx, int cy, UINT flags);
 	BOOL ShowWindow(int nCmdShow);
 	void UpdateWindow();
 	void GetWindowRect(LPRECT lpRect) const;
@@ -127,6 +130,7 @@ public:
 
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT);
+	afx_msg void OnSize(UINT type, int cx, int cy);
 	afx_msg void OnPaint();
 	afx_msg void OnSysCommand(UINT id, LPARAM l);
 	afx_msg void OnNcDestroy();

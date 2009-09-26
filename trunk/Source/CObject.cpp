@@ -41,8 +41,15 @@ BOOL CRuntimeClass::IsDerivedFrom(const CRuntimeClass* pBaseClass) const
 	return FALSE;
 }
 
-CRuntimeClass* FromName(LPCTSTR /*lpszClassName*/)
+CRuntimeClass* CRuntimeClass::FromName(LPCTSTR lpszClassName)
 {
+	for (CRuntimeClass* p = m_pFirstClass; p; p = p->m_pNextClass)
+	{
+		if (lstrcmp(lpszClassName, p->m_lpszClassName) == 0)
+		{
+			return p;
+		}
+	}
 	return NULL;
 }
 
@@ -53,6 +60,7 @@ CRuntimeClass CObject::runtimeCObject(
 
 const CRuntimeClass* CObject::GetRuntimeClass() const
 {
+	ASSERT(this);
 	return &runtimeCObject;
 }
 
@@ -63,7 +71,8 @@ CObject* CObject::CreateObject()
 
 BOOL CObject::IsKindOf(const CRuntimeClass* pClass) const
 {
-	return (GetRuntimeClass() == pClass);
+	ASSERT(this);
+	return (GetRuntimeClass()->IsDerivedFrom(pClass));
 }
 
 ///////////////////////////////////////////////////////////////////////////

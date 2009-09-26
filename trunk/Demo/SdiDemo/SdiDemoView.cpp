@@ -45,7 +45,7 @@ BOOL CSdiDemoView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CSdiDemoView drawing
 
-void CSdiDemoView::OnDraw(CDC* /*pDC*/)
+void CSdiDemoView::OnDraw(CDC* pDC)
 {
 	CSdiDemoDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
@@ -53,6 +53,7 @@ void CSdiDemoView::OnDraw(CDC* /*pDC*/)
 		return;
 
 	// TODO: add draw code for native data here
+	pDC->TextOut(10, 10, _T("Hello, SDI!"));
 }
 
 

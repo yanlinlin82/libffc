@@ -45,14 +45,15 @@ BOOL CMdiDemoView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CMdiDemoView drawing
 
-void CMdiDemoView::OnDraw(CDC* /*pDC*/)
+void CMdiDemoView::OnDraw(CDC* pDC)
 {
 	CMdiDemoDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
+	
 	// TODO: add draw code for native data here
+	pDC->TextOut(10, 10, _T("Hello, MDI!"));
 }
 
 

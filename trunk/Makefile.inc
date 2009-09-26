@@ -73,5 +73,7 @@ all:
 clean:
 	$(MAKE) clean_debug
 	$(MAKE) clean_release
+	rmdir -v --ignore-fail-on-non-empty `find $(TMP_DIR) $(LIB_DIR) $(OUT_DIR) -type d | sort --reverse`
 
 #--------------------------------------------------------------------------
+

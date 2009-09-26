@@ -47,6 +47,13 @@ public: \
 			if (type == _Message) return OnCreate(reinterpret_cast<LPCREATESTRUCT>(l)); \
 		}
 
+#define ON_WM_SIZE() \
+		if (msg == WM_SIZE) \
+		{ \
+			if (type == _Check) return TRUE; \
+			if (type == _Message) { OnSize(w, LOWORD(l), HIWORD(l)); return 0; } \
+		}
+
 #define ON_WM_SYSCOMMAND() \
 		if (msg == WM_SYSCOMMAND) \
 		{ \

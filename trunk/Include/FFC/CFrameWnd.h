@@ -42,13 +42,13 @@ public:
 	CWnd* CreateView(CCreateContext* pContext, UINT nID = AFX_IDW_PANE_FIRST);
 
 public:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
 public:
 	DECLARE_MESSAGE_MAP()
 
 protected:
+	afx_msg void OnSize(UINT type, int cx, int cy);
 	afx_msg void OnNcDestroy();
 
 public:
@@ -67,6 +67,9 @@ class CMDIChildWnd : public CFrameWnd
 {
 public:
 	DECLARE_DYNCREATE(CMDIChildWnd)
+
+public:
+	virtual LRESULT DefWindowProc(UINT msg, WPARAM w, LPARAM l);
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -75,6 +78,16 @@ class CMDIFrameWnd : public CFrameWnd
 {
 public:
 	DECLARE_DYNCREATE(CMDIFrameWnd)
+
+	DECLARE_MESSAGE_MAP()
+protected:
+	afx_msg void OnSize(UINT type, int x, int y);
+
+public:
+	virtual LRESULT DefWindowProc(UINT msg, WPARAM w, LPARAM l);
+
+public:
+	CWnd m_MDIClient;
 };
 
 ///////////////////////////////////////////////////////////////////////////

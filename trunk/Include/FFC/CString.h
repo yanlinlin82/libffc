@@ -70,6 +70,8 @@ public:
 	operator const T*() const { return m_pData; }
 	BOOL IsEmpty() const { return m_pData == EmptyString(); }
 
+	int GetLength() const { return lstrlen(m_pData); }
+
 public:
 	BOOL LoadString(UINT id)
 	{

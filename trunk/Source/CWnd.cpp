@@ -246,6 +246,7 @@ void CWnd::DoDataExchange(CDataExchange* /*pDX*/)
 
 BEGIN_MESSAGE_MAP(CWnd, CCmdTarget)
 	ON_WM_CREATE()
+	ON_WM_SIZE()
 	ON_WM_PAINT()
 	ON_WM_SYSCOMMAND()
 END_MESSAGE_MAP()
@@ -255,6 +256,10 @@ END_MESSAGE_MAP()
 int CWnd::OnCreate(LPCREATESTRUCT)
 {
 	return 0;
+}
+
+void CWnd::OnSize(UINT /*type*/, int /*cx*/, int /*cy*/)
+{
 }
 
 void CWnd::OnPaint()
