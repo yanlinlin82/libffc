@@ -1,17 +1,17 @@
 # Makefile
 
-OBJECTS	= $(MODULES:%.cpp=$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.o)
-RES	= $(RESOURCE:%.rc=$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.rsc)
-DEPS	= $(MODULES:%.cpp=$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d)
+OBJECTS	= $(MODULES:%.cpp=$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.o)
+RES	= $(RESOURCE:%.rc=$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.rsc)
+DEPS	= $(MODULES:%.cpp=$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.d)
 
 #--------------------------------------------------------------------------
 # Dependencies
 
 ifneq ("$(DEPEND)", "")
 
-sinclude $(MODULES:%.cpp=$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d)
+sinclude $(MODULES:%.cpp=$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.d)
 
-$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.d: %.cpp
+$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.d: %.cpp
 	@echo "Parsing dependency for $< ($(CONFIG))"
 	@[ -d $(@D) ] || mkdir -p $(@D)
 	@$(CC) -MM $(INC_DIR:%=-I%) $< -MT $(@:%.d=%.o) > $@.tmp
@@ -40,16 +40,16 @@ $(TARGET): $(OBJECTS)
 
 else
 
-$(TARGET): $(OBJECTS) $(RES) $(LIB_DIR)$(CONFIG)/libffc.a
+$(TARGET): $(OBJECTS) $(RES) $(LIB_DIR)$(PLATFORM)/$(CONFIG)/libffc.a
 	@[ -d $(@D) ] || mkdir -pv $(@D)
-	$(CC) $(LFLAGS) $^ $(LIB_DIR:%=-L%$(CONFIG)) $(LIBS:%=-l%) -o $@
+	$(CC) $(LFLAGS) $^ $(LIB_DIR:%=-L%$(PLATFORM)/$(CONFIG)) $(LIBS:%=-l%) -o $@
 endif
 
-$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.o: %.cpp
+$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.o: %.cpp
 	@[ -d $(@D) ] || mkdir -pv $(@D)
 	$(CC) $(CFLAGS) $(INC_DIR:%=-I%) $< -o $@
 
-$(TMP_DIR)$(CONFIG)/$(PROJECT)/%.rsc: %.rc
+$(TMP_DIR)$(PLATFORM)/$(CONFIG)/$(PROJECT)/%.rsc: %.rc
 	@[ -d $(@D) ] || mkdir -pv $(@D)
 	$(RC) $(INC_DIR:%=-I%) $< -o $@
 
