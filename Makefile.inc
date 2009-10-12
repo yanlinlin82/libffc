@@ -2,7 +2,11 @@
 
 #--------------------------------------------------------------------------
 
+PLATFORM := $(shell uname)
+
+ifeq ("$(PLATFORM)", "Linux")
 COMMAND_PREFIX	= i586-mingw32msvc-
+endif
 
 CC	= $(COMMAND_PREFIX)g++
 RC	= $(COMMAND_PREFIX)windres
@@ -53,6 +57,8 @@ TMP_DIR	= $(ROOT)Temporary/
 LIB_DIR	= $(ROOT)Library/
 OUT_DIR	= $(ROOT)Output/
 
+ALL_DIR	= $(shell find $(TMP_DIR) $(LIB_DIR) $(OUT_DIR) -type d | sort --reverse)
+
 #--------------------------------------------------------------------------
 
 .PHONY: help
@@ -73,7 +79,6 @@ all:
 clean:
 	$(MAKE) clean_debug
 	$(MAKE) clean_release
-	rmdir -v --ignore-fail-on-non-empty `find $(TMP_DIR) $(LIB_DIR) $(OUT_DIR) -type d | sort --reverse`
+	rmdir -v --ignore-fail-on-non-empty $(ALL_DIR)
 
 #--------------------------------------------------------------------------
-

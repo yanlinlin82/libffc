@@ -16,7 +16,7 @@
 // CSdiDemoApp
 
 BEGIN_MESSAGE_MAP(CSdiDemoApp, CWinApp)
-	TRACE("CSdiDemoApp::Message: %u, %u, %u, %u\n", msg, LOWORD(w), HIWORD(w), ID_APP_ABOUT);
+	//TRACE("CSdiDemoApp::Message: %u, %u, %u, %u\n", msg, LOWORD(w), HIWORD(w), ID_APP_ABOUT);
 	ON_COMMAND(ID_APP_ABOUT, CSdiDemoApp::OnAppAbout)
 	// Standard file based document commands
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
