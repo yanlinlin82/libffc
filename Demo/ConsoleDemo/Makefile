@@ -9,7 +9,7 @@ include $(ROOT)Makefile.inc
 LFLAGS		+= -mconsole
 
 PROJECT		= ConsoleDemo
-TARGET		= $(OUT_DIR)$(CONFIG)/$(PROJECT).exe
+TARGET		= $(OUT_PATH)$(PROJECT).exe
 MODULES		= $(wildcard *.cpp)
 RESOURCE	= $(wildcard *.rc)
 LIBS		= ffc
@@ -19,3 +19,4 @@ LIBS		= ffc
 include $(ROOT)Makefile.rules
 
 #--------------------------------------------------------------------------
+
