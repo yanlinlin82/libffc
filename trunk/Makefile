@@ -4,7 +4,7 @@ ROOT	= ./
 
 include Makefile.inc
 
-DEMO	= HelloDemo ConsoleDemo DialogDemo SdiDemo MdiDemo
+DEMO	= HelloDemo ConsoleDemo DialogDemo SdiDemo MdiDemo ATLWinDemo
 
 #--------------------------------------------------------------------------
 

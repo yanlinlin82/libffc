@@ -57,6 +57,10 @@ TMP_DIR	= $(ROOT)Temporary/
 LIB_DIR	= $(ROOT)Library/
 OUT_DIR	= $(ROOT)Output/
 
+TMP_PATH = $(TMP_DIR)$(PLATFORM)/$(CONFIG)/
+LIB_PATH = $(LIB_DIR)$(PLATFORM)/$(CONFIG)/
+OUT_PATH = $(OUT_DIR)$(PLATFORM)/$(CONFIG)/
+
 ALL_DIR	= $(shell find $(TMP_DIR) $(LIB_DIR) $(OUT_DIR) -type d | sort --reverse)
 
 #--------------------------------------------------------------------------
@@ -82,3 +86,4 @@ clean:
 	rmdir -v --ignore-fail-on-non-empty $(ALL_DIR)
 
 #--------------------------------------------------------------------------
+
