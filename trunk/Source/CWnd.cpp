@@ -160,6 +160,11 @@ BOOL CWnd::CreateEx(
 		cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW);
 	}
 
+	if (g_hHook)
+	{
+		::UnhookWindowsHookEx(g_hHook);
+		g_hHook = NULL;
+	}
 	g_hHook = ::SetWindowsHookEx(WH_CALLWNDPROC, CallWndProc, NULL, ::GetCurrentThreadId());
 	g_pWnd = this;
 

@@ -32,7 +32,8 @@ void CDialog::EndDialog(int nResult)
 	::EndDialog(m_hWnd, nResult);
 }
 
-CDialog* g_pDlg = NULL;
+extern HHOOK g_hHook;
+extern CWnd* g_pWnd;
 
 LRESULT CALLBACK CDialog::DialogProcStart(HWND hWnd, UINT msg, WPARAM w, LPARAM l)
 {
@@ -54,11 +55,8 @@ INT_PTR CALLBACK CDialog::_DialogProc(HWND hDlg, UINT msg, WPARAM w, LPARAM)
 {
 	if (msg == WM_INITDIALOG)
 	{
-		g_pDlg->Attach(hDlg);
-		g_pDlg->m_pWndProc = reinterpret_cast<WNDPROC>(::GetWindowLongPtr(hDlg, GWLP_WNDPROC));
-		::SetWindowLongPtr(hDlg, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(DialogProcStart));
-
-		return g_pDlg->OnInitDialog();
+		CDialog* pDlg = static_cast<CDialog*>(CWnd::FromHandle(hDlg));
+		return pDlg->OnInitDialog();
 	}
 	else if (msg == WM_COMMAND)
 	{
@@ -84,10 +82,22 @@ BOOL CDialog::OnInitDialog()
 	return TRUE;
 }
 
+LRESULT CALLBACK CallDlgProc(int nCode, WPARAM wParam, LPARAM lParam)
+{
+	if (nCode == HC_ACTION)
+	{
+		if (g_pWnd)
+		{
+			PCWPSTRUCT p = reinterpret_cast<PCWPSTRUCT>(lParam);
+			g_pWnd->Attach(p->hwnd);
+			g_pWnd = NULL;
+		}
+	}
+	return ::CallNextHookEx(g_hHook, nCode, wParam, lParam);
+}
+
 INT_PTR CDialog::DoModal()
 {
-	g_pDlg = this;
-
 	HWND hParentWnd = NULL;
 	if (m_pParentWnd)
 	{
@@ -98,11 +108,20 @@ INT_PTR CDialog::DoModal()
 		hParentWnd = ::GetActiveWindow();
 	}
 
-	return ::DialogBox(
+	if (g_hHook)
+	{
+		::UnhookWindowsHookEx(g_hHook);
+		g_hHook = NULL;
+	}
+	g_hHook = ::SetWindowsHookEx(WH_CALLWNDPROC, CallDlgProc, NULL, ::GetCurrentThreadId());
+	g_pWnd = this;
+
+	INT_PTR rtn = ::DialogBox(
 		AfxGetResourceHandle(),
 		m_lpszTemplateName,
 		hParentWnd,
 		_DialogProc);
+	return rtn;
 }
 
 void CDialog::OnOK()
